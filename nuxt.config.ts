@@ -1,5 +1,11 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
+  modules: ['@nuxtjs/sanity', '@nuxtjs/tailwindcss'],
+  sanity: {
+    projectId: '2il0jzpa', 
+    dataset: 'production',
+    apiVersion: '2024-03-20',
+    useCdn: true,
+  },
+  compatibilityDate: '2024-11-01',
   devtools: { enabled: true }
 })
