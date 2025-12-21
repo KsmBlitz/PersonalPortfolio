@@ -7,17 +7,6 @@ interface Project {
   link?: string;
 }
 
-// Usar el composable de @nuxtjs/color-mode
-const colorMode = useColorMode()
-
-// Computed para saber si está en modo oscuro
-const isDark = computed(() => colorMode.value === 'dark')
-
-// Función para alternar el tema
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-
 // Query Sanity usando nuestro composable
 const query = `*[_type == "project"]{
   title,
@@ -31,69 +20,75 @@ const { data: projects } = await useSanityQuery<Project[]>(query)
 
 <template>
   <div class="min-h-screen bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
-    
-    <nav class="p-6 border-b border-slate-200 dark:border-slate-800">
-      <div class="max-w-6xl mx-auto flex justify-between items-center">
-        <h1 class="text-xl font-bold tracking-tighter">Mi Portafolio</h1>
-        
-        <div class="flex items-center gap-4">
-          <button 
-            @click="toggleTheme"
-            class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 font-medium text-sm transition-colors"
-          >
-            {{ isDark ? '☀️ Cambiar a Claro' : '🌙 Cambiar a Oscuro' }}
-          </button>
-          
-          <div class="text-sm font-medium text-slate-500">v1.0</div>
-        </div>
-      </div>
-    </nav>
+    <!-- Navigation -->
+    <NavBar />
 
-    <header class="max-w-6xl mx-auto px-6 py-20 text-center md:text-left">
-      <h2 class="text-4xl md:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-500">
-        Desarrollador Web
-      </h2>
-      <p class="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-8">
-        Especializado en crear experiencias digitales escalables con Nuxt, Vue y AWS.
-      </p>
-    </header>
+    <!-- Hero Section -->
+    <HeroSection />
 
-    <main class="max-w-6xl mx-auto px-6 pb-20">
-      <h3 class="text-2xl font-bold mb-8 flex items-center gap-2">
-        <span class="w-2 h-8 bg-indigo-500 rounded-full"></span>
-        Proyectos Destacados
-      </h3>
+    <!-- About Section -->
+    <AboutSection />
 
-      <div v-if="projects" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div v-for="project in projects" :key="project.title" 
-             class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 dark:border-slate-700">
-          
-          <div class="h-48 overflow-hidden bg-slate-200 dark:bg-slate-700">
-            <img v-if="project.imageUrl" :src="project.imageUrl" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-            <div v-else class="w-full h-full flex items-center justify-center text-slate-400">Sin imagen</div>
-          </div>
+    <!-- Skills Section -->
+    <SkillsSection />
 
-          <div class="p-6">
-            <h4 class="text-xl font-bold mb-2 group-hover:text-indigo-500 transition-colors">{{ project.title }}</h4>
-            <p v-if="project.description" class="text-slate-600 dark:text-slate-400 text-sm mb-4 line-clamp-3">
-              {{ project.description }}
-            </p>
-            
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span v-for="tech in project.technologies" :key="tech" 
-                    class="px-2 py-1 text-xs font-semibold bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 rounded-md">
-                {{ tech }}
-              </span>
-            </div>
+    <!-- Projects Section -->
+    <ProjectsSection :projects="projects" />
 
-            <a v-if="project.link" :href="project.link" target="_blank" class="text-sm font-medium text-indigo-500 hover:text-indigo-600 flex items-center gap-1">
-              Ver Proyecto →
-            </a>
-          </div>
-        </div>
-      </div>
-      
-      <div v-else class="text-center py-20 text-slate-500">Cargando proyectos...</div>
-    </main>
+    <!-- Contact Section -->
+    <ContactSection />
+
+    <!-- Footer -->
+    <FooterSection />
   </div>
 </template>
+
+<style>
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #6366f1, #8b5cf6);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #4f46e5, #7c3aed);
+}
+
+/* Selection color */
+::selection {
+  background-color: #6366f1;
+  color: white;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>
