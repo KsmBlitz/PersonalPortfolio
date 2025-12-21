@@ -33,7 +33,14 @@ export default defineNuxtConfig({
       sanityApiVersion: '2024-03-20'
     }
   },
+  
+  nitro: {
+    output: {
+      publicDir: 'dist'
+    }
+  },
 
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true }
 })
+
