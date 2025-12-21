@@ -25,14 +25,7 @@ export default defineNuxtConfig({
     storageKey: 'nuxt-color-mode'
   },
 
-  // 3. Configuración de Sanity (variables de entorno en runtime)
-  runtimeConfig: {
-    public: {
-      sanityProjectId: '2il0jzpa',
-      sanityDataset: 'production',
-      sanityApiVersion: '2024-03-20'
-    }
-  },
+  ssr: false, // Forzamos modo estático/SPA
   
  
 
