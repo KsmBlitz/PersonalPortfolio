@@ -1,21 +1,51 @@
 <script setup lang="ts">
-const query = groq`*[_type == "project"]{
+interface Project {
+  title: string;
+  imageUrl?: string;
+  description?: string;
+  technologies?: string[];
+  link?: string;
+}
+
+// Usar el composable de @nuxtjs/color-mode
+const colorMode = useColorMode()
+
+// Computed para saber si está en modo oscuro
+const isDark = computed(() => colorMode.value === 'dark')
+
+// Función para alternar el tema
+const toggleTheme = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+// Query Sanity usando nuestro composable
+const query = `*[_type == "project"]{
   title,
   "imageUrl": image.asset->url,
   description,
   technologies,
   link
 }`
-const { data: projects } = await useSanityQuery(query)
+const { data: projects } = await useSanityQuery<Project[]>(query)
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
+  <div class="min-h-screen bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 transition-colors duration-300">
     
     <nav class="p-6 border-b border-slate-200 dark:border-slate-800">
       <div class="max-w-6xl mx-auto flex justify-between items-center">
         <h1 class="text-xl font-bold tracking-tighter">Mi Portafolio</h1>
-        <div class="text-sm font-medium text-slate-500">v1.0</div>
+        
+        <div class="flex items-center gap-4">
+          <button 
+            @click="toggleTheme"
+            class="px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 font-medium text-sm transition-colors"
+          >
+            {{ isDark ? '☀️ Cambiar a Claro' : '🌙 Cambiar a Oscuro' }}
+          </button>
+          
+          <div class="text-sm font-medium text-slate-500">v1.0</div>
+        </div>
       </div>
     </nav>
 
@@ -38,7 +68,7 @@ const { data: projects } = await useSanityQuery(query)
         <div v-for="project in projects" :key="project.title" 
              class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 dark:border-slate-700">
           
-          <div class="h-48 overflow-hidden bg-slate-200">
+          <div class="h-48 overflow-hidden bg-slate-200 dark:bg-slate-700">
             <img v-if="project.imageUrl" :src="project.imageUrl" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             <div v-else class="w-full h-full flex items-center justify-center text-slate-400">Sin imagen</div>
           </div>
