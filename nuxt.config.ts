@@ -35,7 +35,7 @@ export default defineNuxtConfig({
   },
   
   nitro: {
-    preset: 'static', // <--- ESTA LÍNEA ES LA SOLUCIÓN (Apaga el modo automático de AWS)
+    preset: 'aws-amplify', // <--- ESTA LÍNEA ES LA SOLUCIÓN (Apaga el modo automático de AWS)
     output: {
       publicDir: 'dist'
     }
