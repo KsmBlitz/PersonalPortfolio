@@ -34,12 +34,7 @@ export default defineNuxtConfig({
     }
   },
   
-  nitro: {
-    preset: 'aws-amplify', // <--- ESTA LÍNEA ES LA SOLUCIÓN (Apaga el modo automático de AWS)
-    output: {
-      publicDir: 'dist'
-    }
-  },
+ 
 
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true }
