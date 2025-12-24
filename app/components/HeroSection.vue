@@ -1,4 +1,15 @@
 <script setup lang="ts">
+interface Profile {
+  name: string;
+  title?: string;
+  photoUrl?: string;
+  shortBio?: string;
+}
+
+const props = defineProps<{
+  profile?: Profile | null
+}>()
+
 const scrollToProjects = () => {
   const element = document.querySelector('#projects')
   if (element) {
@@ -27,10 +38,16 @@ const scrollToContact = () => {
     </div>
 
     <div class="relative z-10 max-w-6xl mx-auto px-6 py-20 text-center">
-      <!-- Avatar/Photo placeholder -->
+      <!-- Avatar/Photo -->
       <div class="mb-8 animate-fade-in-up">
         <div class="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 p-1 shadow-2xl">
-          <div class="w-full h-full rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-4xl">
+          <img 
+            v-if="profile?.photoUrl" 
+            :src="profile.photoUrl" 
+            :alt="profile.name"
+            class="w-full h-full rounded-full object-cover"
+          />
+          <div v-else class="w-full h-full rounded-full bg-white dark:bg-slate-800 flex items-center justify-center text-4xl">
             👨‍💻
           </div>
         </div>
@@ -44,21 +61,18 @@ const scrollToContact = () => {
       <!-- Name -->
       <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-6 animate-fade-in-up animation-delay-400">
         <span class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-          Tu Nombre
+          {{ profile?.name || 'Vicente Estay' }}
         </span>
       </h1>
 
-      <!-- Title with typing effect style -->
+      <!-- Title -->
       <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-700 dark:text-slate-200 mb-6 animate-fade-in-up animation-delay-600">
-        Desarrollador Full Stack
+        {{ profile?.title || 'Desarrollador Full Stack' }}
       </h2>
 
       <!-- Description -->
       <p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-up animation-delay-800">
-        Especializado en crear experiencias digitales excepcionales con
-        <span class="text-indigo-600 dark:text-indigo-400 font-semibold">Vue.js</span>,
-        <span class="text-purple-600 dark:text-purple-400 font-semibold">Nuxt</span> y
-        <span class="text-pink-600 dark:text-pink-400 font-semibold">AWS</span>.
+        {{ profile?.shortBio || 'Especializado en crear experiencias digitales excepcionales con Vue.js, Nuxt y AWS.' }}
       </p>
 
       <!-- CTA Buttons -->

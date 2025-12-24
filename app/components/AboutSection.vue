@@ -1,4 +1,16 @@
 <script setup lang="ts">
+interface Profile {
+  name: string;
+  aboutPhotoUrl?: string;
+  longBio?: string;
+  yearsExperience?: number;
+  projectsCompleted?: number;
+}
+
+const props = defineProps<{
+  profile?: Profile | null
+}>()
+
 const isVisible = ref(false)
 
 onMounted(() => {
@@ -45,7 +57,13 @@ onMounted(() => {
         >
           <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
             <div class="aspect-square bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center">
-              <span class="text-8xl">🚀</span>
+              <img 
+                v-if="profile?.aboutPhotoUrl" 
+                :src="profile.aboutPhotoUrl" 
+                :alt="profile.name"
+                class="w-full h-full object-cover"
+              />
+              <span v-else class="text-8xl">🚀</span>
             </div>
           </div>
           <!-- Decorative elements -->
@@ -59,13 +77,11 @@ onMounted(() => {
           :class="isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'"
         >
           <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4">
-            ¡Hola! Soy un apasionado del desarrollo web
+            ¡Hola! Soy {{ profile?.name || 'Vicente Estay' }}
           </h3>
           
           <p class="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-            Con más de <span class="text-indigo-600 dark:text-indigo-400 font-semibold">X años de experiencia</span> 
-            creando soluciones digitales innovadoras. Me especializo en el desarrollo de aplicaciones web 
-            modernas utilizando las últimas tecnologías del ecosistema JavaScript.
+            {{ profile?.longBio || 'Desarrollador apasionado por crear soluciones digitales innovadoras. Me especializo en el desarrollo de aplicaciones web modernas utilizando las últimas tecnologías del ecosistema JavaScript.' }}
           </p>
 
           <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
@@ -76,11 +92,11 @@ onMounted(() => {
           <!-- Quick Stats -->
           <div class="grid grid-cols-3 gap-4">
             <div class="text-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800">
-              <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">5+</div>
+              <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ profile?.yearsExperience || 1 }}+</div>
               <div class="text-sm text-slate-500 dark:text-slate-400">Años Exp.</div>
             </div>
             <div class="text-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800">
-              <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">20+</div>
+              <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ profile?.projectsCompleted || 5 }}+</div>
               <div class="text-sm text-slate-500 dark:text-slate-400">Proyectos</div>
             </div>
             <div class="text-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800">

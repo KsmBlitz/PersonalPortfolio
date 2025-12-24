@@ -7,15 +7,48 @@ interface Project {
   link?: string;
 }
 
-// Query Sanity usando nuestro composable
-const query = `*[_type == "project"]{
+interface Profile {
+  name: string;
+  title?: string;
+  photoUrl?: string;
+  aboutPhotoUrl?: string;
+  shortBio?: string;
+  longBio?: string;
+  yearsExperience?: number;
+  projectsCompleted?: number;
+  location?: string;
+  email?: string;
+  github?: string;
+  linkedin?: string;
+}
+
+// Query proyectos
+const projectsQuery = `*[_type == "project"]{
   title,
   "imageUrl": image.asset->url,
   description,
   technologies,
   link
 }`
-const { data: projects } = await useSanityQuery<Project[]>(query)
+
+// Query perfil
+const profileQuery = `*[_type == "profile"][0]{
+  name,
+  title,
+  "photoUrl": photo.asset->url,
+  "aboutPhotoUrl": aboutPhoto.asset->url,
+  shortBio,
+  longBio,
+  yearsExperience,
+  projectsCompleted,
+  location,
+  email,
+  github,
+  linkedin
+}`
+
+const { data: projects } = await useSanityQuery<Project[]>(projectsQuery, 'projects')
+const { data: profile } = await useSanityQuery<Profile>(profileQuery, 'profile')
 </script>
 
 <template>
@@ -24,22 +57,22 @@ const { data: projects } = await useSanityQuery<Project[]>(query)
     <NavBar />
 
     <!-- Hero Section -->
-    <HeroSection />
+    <HeroSection :profile="profile" />
 
     <!-- About Section -->
-    <AboutSection />
+    <AboutSection :profile="profile" />
 
     <!-- Skills Section -->
     <SkillsSection />
 
     <!-- Projects Section -->
-    <ProjectsSection :projects="projects" />
+    <ProjectsSection :projects="projects ?? null" />
 
     <!-- Contact Section -->
-    <ContactSection />
+    <ContactSection :profile="profile" />
 
     <!-- Footer -->
-    <FooterSection />
+    <FooterSection :profile="profile" />
   </div>
 </template>
 

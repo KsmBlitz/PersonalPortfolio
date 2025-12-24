@@ -1,4 +1,15 @@
 <script setup lang="ts">
+interface Profile {
+  location?: string;
+  email?: string;
+  github?: string;
+  linkedin?: string;
+}
+
+const props = defineProps<{
+  profile?: Profile | null
+}>()
+
 const isVisible = ref(false)
 const formState = ref({
   name: '',
@@ -8,12 +19,27 @@ const formState = ref({
 const isSubmitting = ref(false)
 const isSubmitted = ref(false)
 
-const socialLinks = [
-  { name: 'GitHub', icon: 'github', url: 'https://github.com/tu-usuario', color: 'hover:text-slate-800 dark:hover:text-white' },
-  { name: 'LinkedIn', icon: 'linkedin', url: 'https://linkedin.com/in/tu-usuario', color: 'hover:text-blue-600' },
-  { name: 'Twitter', icon: 'twitter', url: 'https://twitter.com/tu-usuario', color: 'hover:text-sky-500' },
-  { name: 'Email', icon: 'email', url: 'mailto:tu@email.com', color: 'hover:text-red-500' }
-]
+// Links sociales dinámicos basados en el perfil
+const socialLinks = computed(() => [
+  { 
+    name: 'GitHub', 
+    icon: 'github', 
+    url: props.profile?.github || 'https://github.com/KsmBlitz', 
+    color: 'hover:text-slate-800 dark:hover:text-white' 
+  },
+  { 
+    name: 'LinkedIn', 
+    icon: 'linkedin', 
+    url: props.profile?.linkedin || 'https://www.linkedin.com/in/vicente-estay/', 
+    color: 'hover:text-blue-600' 
+  },
+  { 
+    name: 'Email', 
+    icon: 'email', 
+    url: `mailto:${props.profile?.email || 'vjestayvaldivia@gmail.com'}`, 
+    color: 'hover:text-red-500' 
+  }
+])
 
 onMounted(() => {
   const observer = new IntersectionObserver(
@@ -33,11 +59,31 @@ onMounted(() => {
 
 const handleSubmit = async () => {
   isSubmitting.value = true
-  // Aquí puedes integrar con un servicio como Formspree, Netlify Forms, etc.
-  await new Promise(resolve => setTimeout(resolve, 1500))
-  isSubmitting.value = false
-  isSubmitted.value = true
-  formState.value = { name: '', email: '', message: '' }
+  
+  try {
+    // Enviar a Formspree (crea tu cuenta gratis en formspree.io)
+    // Reemplaza 'TU_FORM_ID' con tu ID de Formspree
+    const response = await fetch('https://formspree.io/f/TU_FORM_ID', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: formState.value.name,
+        email: formState.value.email,
+        message: formState.value.message
+      })
+    })
+    
+    if (response.ok) {
+      isSubmitted.value = true
+      formState.value = { name: '', email: '', message: '' }
+    }
+  } catch (error) {
+    console.error('Error al enviar:', error)
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>
 
@@ -88,7 +134,7 @@ const handleSubmit = async () => {
               </div>
               <div>
                 <div class="font-medium text-slate-800 dark:text-slate-200">Ubicación</div>
-                <div>Tu Ciudad, País</div>
+                <div>{{ profile?.location || 'Chile' }}</div>
               </div>
             </div>
             <div class="flex items-center gap-4 text-slate-600 dark:text-slate-400">
@@ -97,7 +143,7 @@ const handleSubmit = async () => {
               </div>
               <div>
                 <div class="font-medium text-slate-800 dark:text-slate-200">Email</div>
-                <a href="mailto:tu@email.com" class="hover:text-indigo-600 transition-colors">tu@email.com</a>
+                <a :href="`mailto:${profile?.email || 'vjestayvaldivia@gmail.com'}`" class="hover:text-indigo-600 transition-colors">{{ profile?.email || 'vjestayvaldivia@gmail.com' }}</a>
               </div>
             </div>
           </div>

@@ -1,3 +1,17 @@
+<script setup lang="ts">
+interface Profile {
+  name: string;
+}
+
+const props = defineProps<{
+  profile?: Profile | null
+}>()
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+</script>
+
 <template>
   <footer class="py-8 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
     <div class="max-w-6xl mx-auto px-6">
@@ -7,12 +21,12 @@
           href="#hero"
           class="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent"
         >
-          &lt;Dev /&gt;
+          &lt;VE /&gt;
         </a>
 
         <!-- Copyright -->
         <p class="text-slate-500 dark:text-slate-400 text-sm text-center">
-          © {{ new Date().getFullYear() }} Tu Nombre. Todos los derechos reservados.
+          © {{ new Date().getFullYear() }} {{ profile?.name || 'Vicente Estay' }}. Todos los derechos reservados.
         </p>
 
         <!-- Back to top -->
@@ -29,9 +43,3 @@
     </div>
   </footer>
 </template>
-
-<script setup lang="ts">
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
-</script>
