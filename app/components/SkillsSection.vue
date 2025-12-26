@@ -2,23 +2,20 @@
 const isVisible = ref(false)
 
 const skills = [
-  { name: 'Vue.js', level: 95, icon: '💚', color: 'from-green-500 to-emerald-500' },
-  { name: 'Nuxt', level: 90, icon: '💎', color: 'from-green-400 to-teal-500' },
-  { name: 'TypeScript', level: 85, icon: '🔷', color: 'from-blue-500 to-blue-600' },
-  { name: 'JavaScript', level: 95, icon: '⚡', color: 'from-yellow-400 to-orange-500' },
-  { name: 'Tailwind CSS', level: 90, icon: '🎨', color: 'from-cyan-400 to-blue-500' },
-  { name: 'AWS', level: 80, icon: '☁️', color: 'from-orange-400 to-yellow-500' },
-  { name: 'Node.js', level: 85, icon: '🟢', color: 'from-green-500 to-lime-500' },
-  { name: 'Python', level: 75, icon: '🐍', color: 'from-blue-400 to-yellow-400' }
-]
-
-const tools = [
-  { name: 'Git', icon: '📦' },
-  { name: 'Docker', icon: '🐳' },
-  { name: 'VS Code', icon: '💻' },
-  { name: 'Figma', icon: '🎨' },
-  { name: 'Linux', icon: '🐧' },
-  { name: 'CI/CD', icon: '🔄' }
+  { name: 'Vue.js', color: '#42b883', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg' },
+  { name: 'Nuxt', color: '#00dc82', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nuxtjs/nuxtjs-original.svg' },
+  { name: 'TypeScript', color: '#3178c6', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg' },
+  { name: 'JavaScript', color: '#f7df1e', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg' },
+  { name: 'Tailwind', color: '#06b6d4', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg' },
+  { name: 'AWS', color: '#ff9900', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg' },
+  { name: 'Node.js', color: '#339933', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg' },
+  { name: 'Python', color: '#3776ab', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg' },
+  { name: 'Git', color: '#f05032', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg' },
+  { name: 'Docker', color: '#2496ed', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg' },
+  { name: 'PostgreSQL', color: '#4169e1', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
+  { name: 'MongoDB', color: '#47a248', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
+  { name: 'Linux', color: '#fcc624', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg' },
+  { name: 'Figma', color: '#f24e1e', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg' },
 ]
 
 onMounted(() => {
@@ -39,76 +36,46 @@ onMounted(() => {
 </script>
 
 <template>
-  <section id="skills" class="py-20 md:py-32 bg-slate-50 dark:bg-slate-800/50">
-    <div class="max-w-6xl mx-auto px-6">
+  <section id="skills" class="py-24 md:py-32 bg-slate-50 dark:bg-slate-800/50">
+    <div class="max-w-5xl mx-auto px-6">
       <!-- Section Header -->
-      <div class="text-center mb-16">
+      <div class="text-center mb-12">
         <h2 
-          class="text-3xl md:text-4xl font-bold mb-4 transition-all duration-700"
-          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+          class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 transition-all duration-500"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
-          <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Habilidades
-          </span>
+          Stack Técnico
         </h2>
-        <div 
-          class="w-20 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full transition-all duration-700 delay-200"
-          :class="isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'"
-        ></div>
         <p 
-          class="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto transition-all duration-700 delay-300"
-          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+          class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto transition-all duration-500 delay-100"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
-          Tecnologías y herramientas que domino para crear soluciones excepcionales
+          Tecnologías y herramientas que utilizo para construir soluciones
         </p>
       </div>
 
       <!-- Skills Grid -->
-      <div class="grid md:grid-cols-2 gap-6 mb-16">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         <div 
           v-for="(skill, index) in skills" 
           :key="skill.name"
-          class="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
-          :style="{ transitionDelay: `${400 + index * 100}ms` }"
+          class="group flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-800 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-md transition-all duration-300 cursor-default"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+          :style="{ transitionDelay: `${150 + index * 30}ms` }"
         >
-          <div class="flex items-center justify-between mb-3">
-            <div class="flex items-center gap-3">
-              <span class="text-2xl">{{ skill.icon }}</span>
-              <span class="font-semibold text-slate-800 dark:text-slate-100">{{ skill.name }}</span>
-            </div>
-            <span class="text-sm font-medium text-slate-500 dark:text-slate-400">{{ skill.level }}%</span>
-          </div>
-          
-          <!-- Progress Bar -->
-          <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-            <div 
-              class="h-full rounded-full bg-gradient-to-r transition-all duration-1000 ease-out"
-              :class="[skill.color, isVisible ? '' : 'w-0']"
-              :style="{ width: isVisible ? `${skill.level}%` : '0%', transitionDelay: `${600 + index * 100}ms` }"
-            ></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tools Section -->
-      <div 
-        class="text-center transition-all duration-700"
-        :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
-        style="transition-delay: 1200ms"
-      >
-        <h3 class="text-xl font-semibold text-slate-800 dark:text-slate-100 mb-6">
-          Herramientas que uso
-        </h3>
-        <div class="flex flex-wrap justify-center gap-4">
           <div 
-            v-for="tool in tools" 
-            :key="tool.name"
-            class="px-5 py-3 bg-white dark:bg-slate-800 rounded-full shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex items-center gap-2"
+            class="w-9 h-9 rounded-lg flex items-center justify-center p-1.5 flex-shrink-0"
+            :style="{ backgroundColor: skill.color + '15' }"
           >
-            <span>{{ tool.icon }}</span>
-            <span class="font-medium text-slate-700 dark:text-slate-200">{{ tool.name }}</span>
+            <img 
+              :src="skill.logo" 
+              :alt="skill.name"
+              class="w-full h-full object-contain"
+            />
           </div>
+          <span class="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">
+            {{ skill.name }}
+          </span>
         </div>
       </div>
     </div>

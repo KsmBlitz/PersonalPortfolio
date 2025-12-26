@@ -31,77 +31,72 @@ onMounted(() => {
 </script>
 
 <template>
-  <section id="about" class="py-20 md:py-32 bg-white dark:bg-slate-900">
-    <div class="max-w-6xl mx-auto px-6">
+  <section id="about" class="py-24 md:py-32 bg-white dark:bg-slate-900">
+    <div class="max-w-5xl mx-auto px-6">
       <!-- Section Header -->
       <div class="text-center mb-16">
         <h2 
-          class="text-3xl md:text-4xl font-bold mb-4 transition-all duration-700"
-          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+          class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 transition-all duration-500"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
-          <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Sobre Mí
-          </span>
+          Sobre Mí
         </h2>
-        <div 
-          class="w-20 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full transition-all duration-700 delay-200"
-          :class="isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'"
-        ></div>
+        <p 
+          class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto transition-all duration-500 delay-100"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+        >
+          Conoce un poco más sobre quién soy y qué hago
+        </p>
       </div>
 
       <div class="grid md:grid-cols-2 gap-12 items-center">
-        <!-- Image/Visual -->
+        <!-- Image -->
         <div 
-          class="relative transition-all duration-700 delay-300"
-          :class="isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'"
+          class="transition-all duration-500 delay-200"
+          :class="isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8'"
         >
-          <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl">
-            <div class="aspect-square bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 flex items-center justify-center">
-              <img 
-                v-if="profile?.aboutPhotoUrl" 
-                :src="profile.aboutPhotoUrl" 
-                :alt="profile.name"
-                class="w-full h-full object-cover"
-              />
-              <span v-else class="text-8xl">🚀</span>
+          <div class="aspect-square bg-slate-100 dark:bg-slate-800 rounded-2xl overflow-hidden">
+            <img 
+              v-if="profile?.aboutPhotoUrl" 
+              :src="profile.aboutPhotoUrl" 
+              :alt="profile.name"
+              class="w-full h-full object-cover"
+            />
+            <div v-else class="w-full h-full flex items-center justify-center text-slate-300 dark:text-slate-600">
+              <svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
             </div>
           </div>
-          <!-- Decorative elements -->
-          <div class="absolute -top-4 -left-4 w-24 h-24 bg-indigo-500/20 rounded-full blur-xl"></div>
-          <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-purple-500/20 rounded-full blur-xl"></div>
         </div>
 
         <!-- Content -->
         <div 
-          class="transition-all duration-700 delay-500"
-          :class="isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'"
+          class="transition-all duration-500 delay-300"
+          :class="isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'"
         >
-          <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-4">
-            ¡Hola! Soy {{ profile?.name || 'Vicente Estay' }}
+          <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+            {{ profile?.name || 'Vicente Estay' }}
           </h3>
           
-          <p class="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-            {{ profile?.longBio || 'Desarrollador apasionado por crear soluciones digitales innovadoras. Me especializo en el desarrollo de aplicaciones web modernas utilizando las últimas tecnologías del ecosistema JavaScript.' }}
-          </p>
+          <div class="space-y-4 text-slate-600 dark:text-slate-400 leading-relaxed mb-8">
+            <p>
+              {{ profile?.longBio || 'Desarrollador con experiencia en el ecosistema JavaScript moderno. Me especializo en construir aplicaciones web escalables y de alto rendimiento.' }}
+            </p>
+            <p>
+              Mi enfoque está en escribir código limpio y mantenible, priorizando siempre la experiencia del usuario final.
+            </p>
+          </div>
 
-          <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-            Mi enfoque se centra en escribir código limpio, escalable y mantenible, 
-            siempre buscando la mejor experiencia de usuario posible.
-          </p>
-
-          <!-- Quick Stats -->
-          <div class="grid grid-cols-3 gap-4">
-            <div class="text-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800">
-              <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ profile?.yearsExperience || 1 }}+</div>
-              <div class="text-sm text-slate-500 dark:text-slate-400">Años Exp.</div>
+          <!-- Stats -->
+          <div class="flex gap-8">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-slate-900 dark:text-white">{{ profile?.yearsExperience || 1 }}+</div>
+              <div class="text-sm text-slate-500 dark:text-slate-400 mt-1">Años Exp.</div>
             </div>
-            <div class="text-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800">
-              <div class="text-3xl font-bold text-purple-600 dark:text-purple-400">{{ profile?.projectsCompleted || 5 }}+</div>
-              <div class="text-sm text-slate-500 dark:text-slate-400">Proyectos</div>
-            </div>
-            <div class="text-center p-4 rounded-xl bg-slate-50 dark:bg-slate-800">
-              <div class="text-3xl font-bold text-pink-600 dark:text-pink-400">100%</div>
-              <div class="text-sm text-slate-500 dark:text-slate-400">Dedicación</div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-slate-900 dark:text-white">{{ profile?.projectsCompleted || 5 }}+</div>
+              <div class="text-sm text-slate-500 dark:text-slate-400 mt-1">Proyectos</div>
             </div>
           </div>
         </div>

@@ -51,9 +51,9 @@ const scrollTo = (href: string) => {
         <a 
           href="#hero" 
           @click.prevent="scrollTo('#hero')"
-          class="text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+          class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight hover:opacity-70 transition-opacity"
         >
-          &lt;Dev /&gt;
+          VE
         </a>
 
         <!-- Desktop Navigation -->
@@ -63,24 +63,58 @@ const scrollTo = (href: string) => {
             :key="link.name"
             :href="link.href"
             @click.prevent="scrollTo(link.href)"
-            class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors relative group"
+            class="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             {{ link.name }}
-            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 group-hover:w-full transition-all duration-300"></span>
           </a>
           
-          <!-- Theme Toggle -->
+          <!-- Theme Toggle - Sun/Moon Switch -->
           <button 
             @click="toggleTheme"
-            class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+            class="relative w-16 h-8 rounded-full transition-all duration-500 overflow-hidden"
+            :class="isDark 
+              ? 'bg-slate-800 shadow-inner' 
+              : 'bg-blue-400 shadow-inner'"
             :aria-label="isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'"
           >
-            <svg v-if="isDark" class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
-            </svg>
-            <svg v-else class="w-5 h-5 text-slate-700" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-            </svg>
+            <!-- Stars (dark mode) -->
+            <div 
+              class="absolute inset-0 transition-opacity duration-500"
+              :class="isDark ? 'opacity-100' : 'opacity-0'"
+            >
+              <div class="absolute w-1 h-1 bg-white rounded-full top-2 left-3"></div>
+              <div class="absolute w-0.5 h-0.5 bg-white rounded-full top-4 left-5"></div>
+              <div class="absolute w-1 h-1 bg-white rounded-full top-2 left-7"></div>
+              <div class="absolute w-0.5 h-0.5 bg-white rounded-full top-5 left-4"></div>
+            </div>
+            
+            <!-- Clouds (light mode) -->
+            <div 
+              class="absolute inset-0 transition-opacity duration-500"
+              :class="isDark ? 'opacity-0' : 'opacity-100'"
+            >
+              <div class="absolute w-2 h-2 bg-white/60 rounded-full top-4 right-3"></div>
+              <div class="absolute w-1.5 h-1.5 bg-white/40 rounded-full top-5 right-5"></div>
+            </div>
+            
+            <!-- Toggle Circle (Sun/Moon) -->
+            <div 
+              class="absolute top-1 w-6 h-6 rounded-full transition-all duration-500 flex items-center justify-center shadow-md"
+              :class="isDark 
+                ? 'translate-x-9 bg-slate-200' 
+                : 'translate-x-1 bg-yellow-300'"
+            >
+              <!-- Sun rays (light mode) -->
+              <div 
+                v-if="!isDark"
+                class="absolute inset-0 rounded-full bg-yellow-200"
+              ></div>
+              <!-- Moon crescent (dark mode) -->
+              <div 
+                v-if="isDark"
+                class="absolute w-5 h-5 bg-slate-800 rounded-full -translate-x-1.5"
+              ></div>
+            </div>
           </button>
         </div>
 
@@ -118,9 +152,21 @@ const scrollTo = (href: string) => {
             </a>
             <button 
               @click="toggleTheme"
-              class="px-4 py-2 rounded-lg text-left text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-2"
+              class="px-4 py-2 rounded-lg text-left text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center gap-3"
             >
-              <span>{{ isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro' }}</span>
+              <!-- Mini toggle -->
+              <div 
+                class="relative w-12 h-6 rounded-full transition-all duration-500 overflow-hidden"
+                :class="isDark ? 'bg-slate-700' : 'bg-blue-400'"
+              >
+                <div 
+                  class="absolute top-0.5 w-5 h-5 rounded-full transition-all duration-500 shadow"
+                  :class="isDark 
+                    ? 'translate-x-6 bg-slate-200' 
+                    : 'translate-x-0.5 bg-yellow-300'"
+                ></div>
+              </div>
+              <span>{{ isDark ? 'Modo Claro' : 'Modo Oscuro' }}</span>
             </button>
           </div>
         </div>

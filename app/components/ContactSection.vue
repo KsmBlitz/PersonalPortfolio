@@ -85,79 +85,87 @@ const handleSubmit = async () => {
     isSubmitting.value = false
   }
 }
+
+// Generate random styles for particles
+const getParticleStyle = (index: number) => {
+  const left = Math.random() * 100
+  const duration = 10 + Math.random() * 15
+  const delay = Math.random() * 8
+  const size = 2 + Math.random() * 3
+  
+  return {
+    left: `${left}%`,
+    width: `${size}px`,
+    height: `${size}px`,
+    animationDuration: `${duration}s`,
+    animationDelay: `${delay}s`
+  }
+}
 </script>
 
 <template>
-  <section id="contact" class="py-20 md:py-32 bg-slate-50 dark:bg-slate-800/50">
-    <div class="max-w-6xl mx-auto px-6">
+  <section id="contact" class="py-24 md:py-32 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden">
+    <!-- Rising particles background -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="particles-container">
+        <div v-for="i in 20" :key="i" class="particle" :style="getParticleStyle(i)"></div>
+      </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-6 relative z-10">
       <!-- Section Header -->
-      <div class="text-center mb-16">
-        <h2 
-          class="text-3xl md:text-4xl font-bold mb-4 transition-all duration-700"
-          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
-        >
-          <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Contacto
-          </span>
-        </h2>
-        <div 
-          class="w-20 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 mx-auto rounded-full transition-all duration-700 delay-200"
-          :class="isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-0'"
-        ></div>
+      <div class="mb-16">
         <p 
-          class="mt-4 text-slate-600 dark:text-slate-400 max-w-2xl mx-auto transition-all duration-700 delay-300"
-          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'"
+          class="text-sm font-mono text-slate-500 dark:text-slate-400 mb-2 tracking-wider uppercase transition-all duration-500"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
-          ¿Tienes un proyecto en mente? ¡Hablemos!
+          Contacto
         </p>
+        <h2 
+          class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white transition-all duration-500 delay-100"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+        >
+          Trabajemos juntos
+        </h2>
       </div>
 
-      <div class="grid lg:grid-cols-2 gap-12">
+      <div class="grid lg:grid-cols-2 gap-16">
         <!-- Contact Info -->
         <div 
-          class="transition-all duration-700 delay-400"
-          :class="isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'"
+          class="transition-all duration-500 delay-200"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
-          <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6">
-            Trabajemos juntos
-          </h3>
           <p class="text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-            Estoy disponible para proyectos freelance, colaboraciones y oportunidades laborales. 
-            No dudes en contactarme para discutir cómo puedo ayudarte a llevar tu idea al siguiente nivel.
+            Estoy disponible para proyectos freelance y oportunidades laborales. 
+            No dudes en contactarme.
           </p>
 
           <!-- Contact Details -->
           <div class="space-y-4 mb-8">
-            <div class="flex items-center gap-4 text-slate-600 dark:text-slate-400">
-              <div class="w-12 h-12 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
-                <span class="text-xl">📍</span>
-              </div>
-              <div>
-                <div class="font-medium text-slate-800 dark:text-slate-200">Ubicación</div>
-                <div>{{ profile?.location || 'Chile' }}</div>
-              </div>
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Email</p>
+              <a 
+                :href="`mailto:${profile?.email || 'vjestayvaldivia@gmail.com'}`" 
+                class="text-slate-900 dark:text-white hover:opacity-70 transition-opacity"
+              >
+                {{ profile?.email || 'vjestayvaldivia@gmail.com' }}
+              </a>
             </div>
-            <div class="flex items-center gap-4 text-slate-600 dark:text-slate-400">
-              <div class="w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                <span class="text-xl">✉️</span>
-              </div>
-              <div>
-                <div class="font-medium text-slate-800 dark:text-slate-200">Email</div>
-                <a :href="`mailto:${profile?.email || 'vjestayvaldivia@gmail.com'}`" class="hover:text-indigo-600 transition-colors">{{ profile?.email || 'vjestayvaldivia@gmail.com' }}</a>
-              </div>
+            <div>
+              <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">Ubicación</p>
+              <p class="text-slate-900 dark:text-white">{{ profile?.location || 'Chile' }}</p>
             </div>
           </div>
 
           <!-- Social Links -->
-          <div class="flex gap-4">
+          <div class="flex gap-6">
             <a 
               v-for="social in socialLinks" 
               :key="social.name"
               :href="social.url"
               target="_blank"
               rel="noopener noreferrer"
-              class="w-12 h-12 rounded-full bg-white dark:bg-slate-700 shadow-md flex items-center justify-center text-slate-500 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-              :class="social.color"
+              class="text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
               :aria-label="social.name"
             >
               <svg v-if="social.icon === 'github'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -165,9 +173,6 @@ const handleSubmit = async () => {
               </svg>
               <svg v-else-if="social.icon === 'linkedin'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-              </svg>
-              <svg v-else-if="social.icon === 'twitter'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
               </svg>
               <svg v-else-if="social.icon === 'email'" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z"/>
@@ -178,85 +183,76 @@ const handleSubmit = async () => {
 
         <!-- Contact Form -->
         <div 
-          class="transition-all duration-700 delay-600"
-          :class="isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'"
+          class="transition-all duration-500 delay-300"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
           <form 
             v-if="!isSubmitted"
             @submit.prevent="handleSubmit" 
-            class="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-xl"
+            class="space-y-6"
           >
-            <div class="space-y-6">
-              <div>
-                <label for="name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Nombre
-                </label>
-                <input 
-                  id="name"
-                  v-model="formState.name"
-                  type="text" 
-                  required
-                  class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
-                  placeholder="Tu nombre"
-                />
-              </div>
-              
-              <div>
-                <label for="email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Email
-                </label>
-                <input 
-                  id="email"
-                  v-model="formState.email"
-                  type="email" 
-                  required
-                  class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300"
-                  placeholder="tu@email.com"
-                />
-              </div>
-              
-              <div>
-                <label for="message" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Mensaje
-                </label>
-                <textarea 
-                  id="message"
-                  v-model="formState.message"
-                  rows="4" 
-                  required
-                  class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 resize-none"
-                  placeholder="Cuéntame sobre tu proyecto..."
-                ></textarea>
-              </div>
-              
-              <button 
-                type="submit"
-                :disabled="isSubmitting"
-                class="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-indigo-500/30 transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
-                <span v-if="isSubmitting" class="flex items-center justify-center gap-2">
-                  <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"/>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                  </svg>
-                  Enviando...
-                </span>
-                <span v-else>Enviar Mensaje</span>
-              </button>
+            <div>
+              <label for="name" class="block text-sm text-slate-600 dark:text-slate-400 mb-2">
+                Nombre
+              </label>
+              <input 
+                id="name"
+                v-model="formState.name"
+                type="text" 
+                required
+                class="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-white focus:outline-none focus:border-slate-400 dark:focus:border-slate-500 transition-colors"
+                placeholder="Tu nombre"
+              />
             </div>
+            
+            <div>
+              <label for="email" class="block text-sm text-slate-600 dark:text-slate-400 mb-2">
+                Email
+              </label>
+              <input 
+                id="email"
+                v-model="formState.email"
+                type="email" 
+                required
+                class="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-white focus:outline-none focus:border-slate-400 dark:focus:border-slate-500 transition-colors"
+                placeholder="tu@email.com"
+              />
+            </div>
+            
+            <div>
+              <label for="message" class="block text-sm text-slate-600 dark:text-slate-400 mb-2">
+                Mensaje
+              </label>
+              <textarea 
+                id="message"
+                v-model="formState.message"
+                rows="5" 
+                required
+                class="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md text-slate-900 dark:text-white focus:outline-none focus:border-slate-400 dark:focus:border-slate-500 transition-colors resize-none"
+                placeholder="Cuéntame sobre tu proyecto..."
+              ></textarea>
+            </div>
+            
+            <button 
+              type="submit"
+              :disabled="isSubmitting"
+              class="w-full py-3 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-medium rounded-md hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <span v-if="isSubmitting">Enviando...</span>
+              <span v-else>Enviar mensaje</span>
+            </button>
           </form>
 
           <!-- Success Message -->
           <div 
             v-else 
-            class="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-xl text-center"
+            class="text-center py-12"
           >
-            <div class="text-6xl mb-4">✅</div>
-            <h3 class="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">
-              ¡Mensaje enviado!
-            </h3>
+            <p class="text-lg font-medium text-slate-900 dark:text-white mb-2">
+              Mensaje enviado
+            </p>
             <p class="text-slate-600 dark:text-slate-400">
-              Gracias por contactarme. Te responderé lo antes posible.
+              Te responderé lo antes posible.
             </p>
           </div>
         </div>
@@ -264,3 +260,44 @@ const handleSubmit = async () => {
     </div>
   </section>
 </template>
+
+<style scoped>
+/* Particles */
+.particles-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  background: currentColor;
+  border-radius: 50%;
+  animation: rise linear infinite;
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(100%) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100px) translateX(15px);
+    opacity: 0;
+  }
+}
+
+.dark .particle {
+  color: rgba(148, 163, 184, 0.5);
+}
+
+.particle {
+  color: rgba(100, 116, 139, 0.3);
+}
+</style>
