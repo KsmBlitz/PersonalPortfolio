@@ -89,44 +89,54 @@ const handleSubmit = async () => {
 // Generate random styles for particles
 const getParticleStyle = (index: number) => {
   const left = Math.random() * 100
-  const duration = 10 + Math.random() * 15
-  const delay = Math.random() * 8
-  const size = 2 + Math.random() * 3
+  const duration = 8 + Math.random() * 12
+  const delay = Math.random() * 6
+  const size = 3 + Math.random() * 5
+  const opacity = 0.2 + Math.random() * 0.3
   
   return {
     left: `${left}%`,
     width: `${size}px`,
     height: `${size}px`,
     animationDuration: `${duration}s`,
-    animationDelay: `${delay}s`
+    animationDelay: `${delay}s`,
+    '--particle-opacity': opacity
   }
 }
 </script>
 
 <template>
   <section id="contact" class="py-24 md:py-32 bg-slate-50 dark:bg-slate-900/50 relative overflow-hidden">
-    <!-- Rising particles background -->
+    <!-- Animated background -->
     <div class="absolute inset-0 pointer-events-none">
+      <!-- Particles -->
       <div class="particles-container">
-        <div v-for="i in 20" :key="i" class="particle" :style="getParticleStyle(i)"></div>
+        <div v-for="i in 50" :key="i" class="particle" :style="getParticleStyle(i)"></div>
       </div>
+      
+      <!-- Grid pattern -->
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
+      
+      <!-- Gradient orbs -->
+      <div class="absolute -top-32 -right-32 w-96 h-96 bg-blue-200/30 dark:bg-blue-500/10 rounded-full blur-3xl animate-orb-float"></div>
+      <div class="absolute -bottom-32 -left-32 w-[400px] h-[400px] bg-slate-300/40 dark:bg-slate-600/15 rounded-full blur-3xl animate-orb-float animation-delay-2000"></div>
     </div>
 
     <div class="max-w-5xl mx-auto px-6 relative z-10">
       <!-- Section Header -->
-      <div class="mb-16">
-        <p 
-          class="text-sm font-mono text-slate-500 dark:text-slate-400 mb-2 tracking-wider uppercase transition-all duration-500"
-          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-        >
-          Contacto
-        </p>
+      <div class="text-center mb-16">
         <h2 
-          class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white transition-all duration-500 delay-100"
+          class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 transition-all duration-500"
           :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
-          Trabajemos juntos
+          Trabajemos Juntos
         </h2>
+        <p 
+          class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto transition-all duration-500 delay-100"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+        >
+          Estoy disponible para proyectos freelance y oportunidades laborales
+        </p>
       </div>
 
       <div class="grid lg:grid-cols-2 gap-16">
@@ -273,31 +283,51 @@ const getParticleStyle = (index: number) => {
   position: absolute;
   background: currentColor;
   border-radius: 50%;
+  opacity: var(--particle-opacity, 0.3);
   animation: rise linear infinite;
+  box-shadow: 0 0 4px currentColor;
 }
 
 @keyframes rise {
   0% {
-    transform: translateY(100%) translateX(0);
+    transform: translateY(100%) translateX(0) scale(0.5);
     opacity: 0;
   }
-  10% {
-    opacity: 0.3;
+  15% {
+    opacity: var(--particle-opacity, 0.4);
+    transform: translateY(80%) translateX(8px) scale(1);
   }
-  90% {
-    opacity: 0.3;
+  85% {
+    opacity: var(--particle-opacity, 0.4);
   }
   100% {
-    transform: translateY(-100px) translateX(15px);
+    transform: translateY(-50px) translateX(20px) scale(0.7);
     opacity: 0;
   }
+}
+
+@keyframes orb-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-40px) translateX(30px);
+  }
+}
+
+.animate-orb-float {
+  animation: orb-float 15s ease-in-out infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
 }
 
 .dark .particle {
-  color: rgba(148, 163, 184, 0.5);
+  color: rgba(148, 163, 184, 0.6);
 }
 
 .particle {
-  color: rgba(100, 116, 139, 0.3);
+  color: rgba(100, 116, 139, 0.4);
 }
 </style>

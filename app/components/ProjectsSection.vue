@@ -32,34 +32,34 @@ onMounted(() => {
 
 <template>
   <section id="projects" class="py-24 md:py-32 bg-white dark:bg-slate-900">
-    <div class="max-w-5xl mx-auto px-6">
+    <div class="max-w-6xl mx-auto px-6">
       <!-- Section Header -->
-      <div class="mb-16">
-        <p 
-          class="text-sm font-mono text-slate-500 dark:text-slate-400 mb-2 tracking-wider uppercase transition-all duration-500"
-          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-        >
-          Portfolio
-        </p>
+      <div class="text-center mb-16">
         <h2 
-          class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white transition-all duration-500 delay-100"
+          class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 transition-all duration-500"
           :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
         >
-          Proyectos seleccionados
+          Proyectos
         </h2>
+        <p 
+          class="text-slate-600 dark:text-slate-400 max-w-xl mx-auto transition-all duration-500 delay-100"
+          :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+        >
+          Algunos proyectos en los que he trabajado
+        </p>
       </div>
 
-      <!-- Projects List -->
-      <div v-if="projects && projects.length > 0" class="space-y-16">
+      <!-- Projects Grid -->
+      <div v-if="projects && projects.length > 0" class="grid md:grid-cols-2 gap-8">
         <article 
           v-for="(project, index) in projects" 
           :key="project.title"
-          class="group grid md:grid-cols-2 gap-8 items-center transition-all duration-500"
+          class="group bg-slate-50 dark:bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-xl transition-all duration-500"
           :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
           :style="{ transitionDelay: `${150 + index * 100}ms` }"
         >
           <!-- Image -->
-          <div class="aspect-video bg-slate-100 dark:bg-slate-800 rounded-lg overflow-hidden">
+          <div class="aspect-video bg-slate-100 dark:bg-slate-800 overflow-hidden">
             <img 
               v-if="project.imageUrl" 
               :src="project.imageUrl" 
@@ -77,23 +77,23 @@ onMounted(() => {
           </div>
 
           <!-- Content -->
-          <div>
-            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-slate-900 dark:text-white mb-3 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
               {{ project.title }}
             </h3>
             
-            <p v-if="project.description" class="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed">
+            <p v-if="project.description" class="text-slate-600 dark:text-slate-400 mb-4 leading-relaxed text-sm">
               {{ project.description }}
             </p>
 
             <!-- Technologies -->
-            <div v-if="project.technologies && project.technologies.length > 0" class="flex flex-wrap gap-2 mb-4">
+            <div v-if="project.technologies && project.technologies.length > 0" class="flex flex-wrap gap-2 mb-5">
               <span 
                 v-for="tech in project.technologies" 
                 :key="tech"
-                class="text-xs text-slate-500 dark:text-slate-400"
+                class="text-xs px-2.5 py-1 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full"
               >
-                {{ tech }}{{ project.technologies?.indexOf(tech) !== (project.technologies?.length || 0) - 1 ? ' ·' : '' }}
+                {{ tech }}
               </span>
             </div>
 
@@ -103,10 +103,10 @@ onMounted(() => {
               :href="project.link" 
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white hover:opacity-70 transition-opacity"
+              class="inline-flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
             >
               Ver proyecto
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
               </svg>
             </a>

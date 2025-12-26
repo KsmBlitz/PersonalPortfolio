@@ -27,16 +27,18 @@ const scrollToContact = () => {
 // Generate random styles for particles
 const getParticleStyle = (index: number) => {
   const left = Math.random() * 100
-  const duration = 8 + Math.random() * 12
-  const delay = Math.random() * 10
-  const size = 2 + Math.random() * 4
+  const duration = 6 + Math.random() * 10
+  const delay = Math.random() * 8
+  const size = 3 + Math.random() * 6
+  const opacity = 0.3 + Math.random() * 0.4
   
   return {
     left: `${left}%`,
     width: `${size}px`,
     height: `${size}px`,
     animationDuration: `${duration}s`,
-    animationDelay: `${delay}s`
+    animationDelay: `${delay}s`,
+    '--particle-opacity': opacity
   }
 }
 </script>
@@ -47,31 +49,44 @@ const getParticleStyle = (index: number) => {
     <div class="absolute inset-0 bg-white dark:bg-slate-900">
       <!-- Rising particles -->
       <div class="particles-container">
-        <div v-for="i in 30" :key="i" class="particle" :style="getParticleStyle(i)"></div>
+        <div v-for="i in 80" :key="i" class="particle" :style="getParticleStyle(i)"></div>
       </div>
+      
+      <!-- Decorative grid lines -->
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+      
+      <!-- Animated gradient orbs -->
+      <div class="absolute top-20 left-10 w-96 h-96 bg-blue-300/30 dark:bg-blue-500/10 rounded-full blur-3xl animate-orb-float"></div>
+      <div class="absolute bottom-20 right-10 w-[500px] h-[500px] bg-slate-300/40 dark:bg-slate-600/15 rounded-full blur-3xl animate-orb-float animation-delay-2000"></div>
+      <div class="absolute top-1/2 left-1/3 w-80 h-80 bg-indigo-200/20 dark:bg-indigo-500/5 rounded-full blur-3xl animate-orb-pulse"></div>
+      
+      <!-- Floating geometric shapes -->
+      <div class="absolute top-1/4 right-1/4 w-4 h-4 border-2 border-slate-300 dark:border-slate-600 rotate-45 animate-float-slow opacity-40"></div>
+      <div class="absolute bottom-1/3 left-1/5 w-6 h-6 border-2 border-slate-300 dark:border-slate-600 rounded-full animate-float-slow animation-delay-1000 opacity-30"></div>
+      <div class="absolute top-2/3 right-1/5 w-3 h-3 bg-slate-400/30 dark:bg-slate-500/20 rotate-45 animate-float-slow animation-delay-3000"></div>
     </div>
 
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-20">
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
+    <div class="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 py-12">
+      <div class="grid lg:grid-cols-2 gap-16 xl:gap-24 items-center">
         <!-- Content -->
         <div class="animate-fade-in order-2 lg:order-1">
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 rounded-full mb-6 animate-fade-in-up">
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 rounded-full mb-8 animate-fade-in-up">
             <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
             <span class="text-sm font-medium text-slate-600 dark:text-slate-400">Disponible para trabajar</span>
           </div>
 
           <!-- Name -->
-          <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight animate-fade-in-up animation-delay-100">
+          <h1 class="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight animate-fade-in-up animation-delay-100">
             {{ profile?.name || 'Vicente Estay' }}
           </h1>
 
           <!-- Title with gradient -->
-          <h2 class="text-2xl md:text-3xl font-semibold bg-gradient-to-r from-slate-600 via-slate-500 to-slate-400 dark:from-slate-300 dark:via-slate-400 dark:to-slate-500 bg-clip-text text-transparent mb-6 animate-fade-in-up animation-delay-200">
+          <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold bg-gradient-to-r from-slate-600 via-slate-500 to-slate-400 dark:from-slate-300 dark:via-slate-400 dark:to-slate-500 bg-clip-text text-transparent mb-8 animate-fade-in-up animation-delay-200">
             {{ profile?.title || 'Desarrollador Full Stack' }}
           </h2>
 
           <!-- Description -->
-          <p class="text-lg text-slate-600 dark:text-slate-400 max-w-xl mb-8 leading-relaxed animate-fade-in-up animation-delay-300">
+          <p class="text-lg lg:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-10 leading-relaxed animate-fade-in-up animation-delay-300">
             {{ profile?.shortBio || 'Construyo aplicaciones web modernas con foco en rendimiento, accesibilidad y experiencia de usuario.' }}
           </p>
 
@@ -97,18 +112,18 @@ const getParticleStyle = (index: number) => {
           </div>
 
           <!-- Quick stats -->
-          <div class="flex gap-8 mt-10 pt-8 border-t border-slate-200 dark:border-slate-800 animate-fade-in-up animation-delay-400">
+          <div class="flex gap-10 lg:gap-12 mt-12 pt-10 border-t border-slate-200 dark:border-slate-800 animate-fade-in-up animation-delay-400">
             <div>
-              <div class="text-2xl font-bold text-slate-900 dark:text-white">1+</div>
-              <div class="text-sm text-slate-500 dark:text-slate-400">Años exp.</div>
+              <div class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">1+</div>
+              <div class="text-sm lg:text-base text-slate-500 dark:text-slate-400">Años exp.</div>
             </div>
             <div>
-              <div class="text-2xl font-bold text-slate-900 dark:text-white">5+</div>
-              <div class="text-sm text-slate-500 dark:text-slate-400">Proyectos</div>
+              <div class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">5+</div>
+              <div class="text-sm lg:text-base text-slate-500 dark:text-slate-400">Proyectos</div>
             </div>
             <div>
-              <div class="text-2xl font-bold text-slate-900 dark:text-white">10+</div>
-              <div class="text-sm text-slate-500 dark:text-slate-400">Tecnologías</div>
+              <div class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">10+</div>
+              <div class="text-sm lg:text-base text-slate-500 dark:text-slate-400">Tecnologías</div>
             </div>
           </div>
         </div>
@@ -117,12 +132,12 @@ const getParticleStyle = (index: number) => {
         <div class="order-1 lg:order-2 flex justify-center animate-fade-in animation-delay-200">
           <div class="relative">
             <!-- Decorative elements -->
-            <div class="absolute -inset-4 bg-gradient-to-br from-slate-200 via-slate-100 to-transparent dark:from-slate-700 dark:via-slate-800 dark:to-transparent rounded-3xl blur-2xl opacity-60"></div>
-            <div class="absolute -top-6 -right-6 w-24 h-24 bg-slate-200/50 dark:bg-slate-700/30 rounded-full blur-xl animate-pulse-slow"></div>
-            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-slate-300/40 dark:bg-slate-600/20 rounded-full blur-xl animate-pulse-slow animation-delay-1000"></div>
+            <div class="absolute -inset-8 bg-gradient-to-br from-slate-200 via-slate-100 to-transparent dark:from-slate-700 dark:via-slate-800 dark:to-transparent rounded-3xl blur-3xl opacity-60"></div>
+            <div class="absolute -top-8 -right-8 w-32 h-32 bg-slate-200/50 dark:bg-slate-700/30 rounded-full blur-xl animate-pulse-slow"></div>
+            <div class="absolute -bottom-8 -left-8 w-40 h-40 bg-slate-300/40 dark:bg-slate-600/20 rounded-full blur-xl animate-pulse-slow animation-delay-1000"></div>
             
             <!-- Photo container -->
-            <div class="relative w-72 h-72 md:w-80 md:h-80 rounded-2xl overflow-hidden border-2 border-slate-200 dark:border-slate-700 shadow-2xl shadow-slate-900/10 dark:shadow-black/30">
+            <div class="relative w-80 h-80 md:w-96 md:h-96 lg:w-[400px] lg:h-[400px] xl:w-[450px] xl:h-[450px] rounded-2xl overflow-hidden border-2 border-slate-200 dark:border-slate-700 shadow-2xl shadow-slate-900/10 dark:shadow-black/30">
               <img 
                 v-if="profile?.photoUrl" 
                 :src="profile.photoUrl" 
@@ -130,7 +145,7 @@ const getParticleStyle = (index: number) => {
                 class="w-full h-full object-cover"
               />
               <div v-else class="w-full h-full bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700 flex items-center justify-center">
-                <div class="text-6xl font-bold text-slate-300 dark:text-slate-600">VE</div>
+                <div class="text-7xl lg:text-8xl font-bold text-slate-300 dark:text-slate-600">VE</div>
               </div>
             </div>
 
@@ -211,29 +226,73 @@ const getParticleStyle = (index: number) => {
 
 .particle {
   position: absolute;
-  width: 4px;
-  height: 4px;
   background: currentColor;
   border-radius: 50%;
-  opacity: 0.3;
+  opacity: var(--particle-opacity, 0.4);
   animation: rise linear infinite;
+  box-shadow: 0 0 6px currentColor;
 }
 
 @keyframes rise {
   0% {
-    transform: translateY(100vh) translateX(0);
+    transform: translateY(100vh) translateX(0) scale(0.5);
     opacity: 0;
   }
-  10% {
-    opacity: 0.4;
+  15% {
+    opacity: var(--particle-opacity, 0.5);
+    transform: translateY(80vh) translateX(10px) scale(1);
   }
-  90% {
-    opacity: 0.4;
+  85% {
+    opacity: var(--particle-opacity, 0.5);
   }
   100% {
-    transform: translateY(-100px) translateX(20px);
+    transform: translateY(-50px) translateX(30px) scale(0.8);
     opacity: 0;
   }
+}
+
+@keyframes orb-float {
+  0%, 100% {
+    transform: translateY(0) translateX(0) scale(1);
+  }
+  33% {
+    transform: translateY(-30px) translateX(20px) scale(1.05);
+  }
+  66% {
+    transform: translateY(20px) translateX(-15px) scale(0.95);
+  }
+}
+
+@keyframes orb-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.5;
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+.animate-orb-float {
+  animation: orb-float 12s ease-in-out infinite;
+}
+
+.animate-orb-pulse {
+  animation: orb-pulse 8s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
 }
 
 @keyframes pulse-slow {
@@ -250,11 +309,11 @@ const getParticleStyle = (index: number) => {
 }
 
 .dark .particle {
-  color: rgba(148, 163, 184, 0.6);
+  color: rgba(148, 163, 184, 0.7);
 }
 
 .particle {
-  color: rgba(100, 116, 139, 0.4);
+  color: rgba(100, 116, 139, 0.5);
 }
 
 .animation-delay-100 { animation-delay: 0.1s; }
@@ -262,4 +321,6 @@ const getParticleStyle = (index: number) => {
 .animation-delay-300 { animation-delay: 0.3s; }
 .animation-delay-400 { animation-delay: 0.4s; }
 .animation-delay-1000 { animation-delay: 1s; }
+.animation-delay-2000 { animation-delay: 2s; }
+.animation-delay-3000 { animation-delay: 3s; }
 </style>
