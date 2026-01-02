@@ -6,8 +6,13 @@ interface Profile {
   shortBio?: string;
 }
 
+interface Project {
+  title: string;
+}
+
 const props = defineProps<{
-  profile?: Profile | null
+  profile?: Profile | null,
+  projects?: Project[] | null
 }>()
 
 const scrollToProjects = () => {
@@ -23,6 +28,82 @@ const scrollToContact = () => {
     element.scrollIntoView({ behavior: 'smooth' })
   }
 }
+
+const downloadCV = () => {
+  // Link al CV - puedes subirlo a /public/cv.pdf o usar un link externo
+  window.open('/cv.pdf', '_blank')
+}
+
+// Animated counter
+const yearsExp = ref(0)
+const projectsCount = ref(0)
+const techCount = ref(0)
+const isCounterVisible = ref(false)
+
+const animateCounter = (target: number, current: Ref<number>, duration: number = 2000) => {
+  const startTime = Date.now()
+  const endTime = startTime + duration
+  
+  const updateCounter = () => {
+    const now = Date.now()
+    const progress = Math.min((now - startTime) / duration, 1)
+    const easeOutQuart = 1 - Math.pow(1 - progress, 4)
+    
+    current.value = Math.floor(easeOutQuart * target)
+    
+    if (progress < 1) {
+      requestAnimationFrame(updateCounter)
+    } else {
+      current.value = target
+    }
+  }
+  
+  requestAnimationFrame(updateCounter)
+}
+
+onMounted(() => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !isCounterVisible.value) {
+          isCounterVisible.value = true
+          animateCounter(1, yearsExp, 1500)
+          animateCounter(props.projects?.length || 3, projectsCount, 2000)
+          animateCounter(10, techCount, 2500)
+        }
+      })
+    },
+    { threshold: 0.5 }
+  )
+
+  const statsElement = document.querySelector('#stats')
+  if (statsElement) observer.observe(statsElement)
+})
+
+// Typing effect
+const displayedTitle = ref('')
+const fullTitle = computed(() => props.profile?.title || 'Desarrollador Full Stack')
+const isTyping = ref(false)
+const isAnimating = ref(true) // Control para animaciones pesadas
+
+onMounted(() => {
+  setTimeout(() => {
+    isTyping.value = true
+    let index = 0
+    const typingInterval = setInterval(() => {
+      if (index < fullTitle.value.length) {
+        displayedTitle.value += fullTitle.value[index]
+        index++
+      } else {
+        clearInterval(typingInterval)
+        // Dar tiempo para que termine el contador antes de reactivar animaciones de fondo
+        setTimeout(() => {
+          isAnimating.value = false
+        }, 2500)
+      }
+    }, 80)
+  }, 500)
+})
 
 // Generate random styles for particles
 const getParticleStyle = (index: number) => {
@@ -47,10 +128,12 @@ const getParticleStyle = (index: number) => {
   <section id="hero" class="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
     <!-- Animated background -->
     <div class="absolute inset-0 bg-white dark:bg-slate-900">
-      <!-- Rising particles -->
-      <div class="particles-container">
-        <div v-for="i in 80" :key="i" class="particle" :style="getParticleStyle(i)"></div>
-      </div>
+      <!-- Rising particles - ocultas durante animaciones pesadas -->
+      <Transition name="fade-particles">
+        <div v-show="!isAnimating" class="particles-container">
+          <div v-for="i in 30" :key="i" class="particle" :style="getParticleStyle(i)"></div>
+        </div>
+      </Transition>
       
       <!-- Decorative grid lines -->
       <div class="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
@@ -80,9 +163,10 @@ const getParticleStyle = (index: number) => {
             {{ profile?.name || 'Vicente Estay' }}
           </h1>
 
-          <!-- Title with gradient -->
-          <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold bg-gradient-to-r from-slate-600 via-slate-500 to-slate-400 dark:from-slate-300 dark:via-slate-400 dark:to-slate-500 bg-clip-text text-transparent mb-8 animate-fade-in-up animation-delay-200">
-            {{ profile?.title || 'Desarrollador Full Stack' }}
+          <!-- Title with gradient and typing effect -->
+          <h2 class="text-2xl md:text-3xl lg:text-4xl font-semibold bg-gradient-to-r from-slate-600 via-slate-500 to-slate-400 dark:from-slate-300 dark:via-slate-400 dark:to-slate-500 bg-clip-text text-transparent mb-8 animate-fade-in-up animation-delay-200 min-h-[3rem] flex items-center">
+            <span>{{ displayedTitle }}</span>
+            <span v-if="isTyping && displayedTitle.length < fullTitle.length" class="inline-block w-0.5 h-8 bg-slate-500 dark:bg-slate-400 ml-1 animate-blink"></span>
           </h2>
 
           <!-- Description -->
@@ -104,6 +188,17 @@ const getParticleStyle = (index: number) => {
               </span>
             </button>
             <button 
+              @click="downloadCV"
+              class="group px-6 py-3 text-slate-900 dark:text-white text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all"
+            >
+              <span class="flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Descargar CV
+              </span>
+            </button>
+            <button 
               @click="scrollToContact"
               class="px-6 py-3 text-slate-600 dark:text-slate-400 text-sm font-medium rounded-lg border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all"
             >
@@ -111,18 +206,18 @@ const getParticleStyle = (index: number) => {
             </button>
           </div>
 
-          <!-- Quick stats -->
-          <div class="flex gap-10 lg:gap-12 mt-12 pt-10 border-t border-slate-200 dark:border-slate-800 animate-fade-in-up animation-delay-400">
+          <!-- Quick stats with animated counter -->
+          <div id="stats" class="flex gap-10 lg:gap-12 mt-12 pt-10 border-t border-slate-200 dark:border-slate-800 animate-fade-in-up animation-delay-400">
             <div>
-              <div class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">1+</div>
+              <div class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">{{ yearsExp }}</div>
               <div class="text-sm lg:text-base text-slate-500 dark:text-slate-400">Años exp.</div>
             </div>
             <div>
-              <div class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">5+</div>
+              <div class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">{{ projectsCount }}</div>
               <div class="text-sm lg:text-base text-slate-500 dark:text-slate-400">Proyectos</div>
             </div>
             <div>
-              <div class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">10+</div>
+              <div class="text-3xl lg:text-4xl font-bold text-slate-900 dark:text-white">{{ techCount }}</div>
               <div class="text-sm lg:text-base text-slate-500 dark:text-slate-400">Tecnologías</div>
             </div>
           </div>
@@ -314,6 +409,18 @@ const getParticleStyle = (index: number) => {
 
 .particle {
   color: rgba(100, 116, 139, 0.5);
+  will-change: transform, opacity;
+}
+
+/* Smooth fade for particles */
+.fade-particles-enter-active,
+.fade-particles-leave-active {
+  transition: opacity 1.5s ease;
+}
+
+.fade-particles-enter-from,
+.fade-particles-leave-to {
+  opacity: 0;
 }
 
 .animation-delay-100 { animation-delay: 0.1s; }
@@ -323,4 +430,14 @@ const getParticleStyle = (index: number) => {
 .animation-delay-1000 { animation-delay: 1s; }
 .animation-delay-2000 { animation-delay: 2s; }
 .animation-delay-3000 { animation-delay: 3s; }
+
+/* Typing cursor blink */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.animate-blink {
+  animation: blink 1s step-end infinite;
+}
 </style>

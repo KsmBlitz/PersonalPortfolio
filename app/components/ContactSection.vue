@@ -18,6 +18,9 @@ const formState = ref({
 })
 const isSubmitting = ref(false)
 const isSubmitted = ref(false)
+const showToast = ref(false)
+const toastMessage = ref('')
+const toastType = ref<'success' | 'error'>('success')
 
 // Links sociales dinámicos basados en el perfil
 const socialLinks = computed(() => [
@@ -61,9 +64,7 @@ const handleSubmit = async () => {
   isSubmitting.value = true
   
   try {
-    // Enviar a Formspree (crea tu cuenta gratis en formspree.io)
-    // Reemplaza 'TU_FORM_ID' con tu ID de Formspree
-    const response = await fetch('https://formspree.io/f/TU_FORM_ID', {
+    const response = await fetch('https://formspree.io/f/xqezorqo', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -78,9 +79,23 @@ const handleSubmit = async () => {
     if (response.ok) {
       isSubmitted.value = true
       formState.value = { name: '', email: '', message: '' }
+      
+      // Show success toast
+      toastType.value = 'success'
+      toastMessage.value = '¡Mensaje enviado! Te responderé pronto.'
+      showToast.value = true
+      setTimeout(() => showToast.value = false, 5000)
+    } else {
+      throw new Error('Error al enviar')
     }
   } catch (error) {
     console.error('Error al enviar:', error)
+    
+    // Show error toast
+    toastType.value = 'error'
+    toastMessage.value = 'Hubo un error al enviar el mensaje. Intenta nuevamente.'
+    showToast.value = true
+    setTimeout(() => showToast.value = false, 5000)
   } finally {
     isSubmitting.value = false
   }
@@ -268,6 +283,25 @@ const getParticleStyle = (index: number) => {
         </div>
       </div>
     </div>
+
+    <!-- Toast Notification -->
+    <Transition name="toast">
+      <div
+        v-if="showToast"
+        class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-lg shadow-2xl flex items-center gap-3 max-w-md"
+        :class="toastType === 'success' 
+          ? 'bg-emerald-500 text-white' 
+          : 'bg-red-500 text-white'"
+      >
+        <svg v-if="toastType === 'success'" class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <svg v-else class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+        <p class="font-medium">{{ toastMessage }}</p>
+      </div>
+    </Transition>
   </section>
 </template>
 
@@ -329,5 +363,21 @@ const getParticleStyle = (index: number) => {
 
 .particle {
   color: rgba(100, 116, 139, 0.4);
+}
+
+/* Toast transition */
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.3s ease;
+}
+
+.toast-enter-from {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+}
+
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
 }
 </style>

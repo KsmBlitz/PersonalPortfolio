@@ -7,8 +7,13 @@ interface Profile {
   projectsCompleted?: number;
 }
 
+interface Project {
+  title: string;
+}
+
 const props = defineProps<{
-  profile?: Profile | null
+  profile?: Profile | null,
+  projects?: Project[] | null
 }>()
 
 const isVisible = ref(false)
@@ -83,19 +88,17 @@ onMounted(() => {
             <p>
               {{ profile?.longBio || 'Desarrollador con experiencia en el ecosistema JavaScript moderno. Me especializo en construir aplicaciones web escalables y de alto rendimiento.' }}
             </p>
-            <p>
-              Mi enfoque está en escribir código limpio y mantenible, priorizando siempre la experiencia del usuario final.
-            </p>
+              <!-- Frase eliminada -->
           </div>
 
           <!-- Stats -->
           <div class="flex gap-8">
             <div class="text-center">
-              <div class="text-3xl font-bold text-slate-900 dark:text-white">{{ profile?.yearsExperience || 1 }}+</div>
+              <div class="text-3xl font-bold text-slate-900 dark:text-white">{{ profile?.yearsExperience || 1 }}</div>
               <div class="text-sm text-slate-500 dark:text-slate-400 mt-1">Años Exp.</div>
             </div>
             <div class="text-center">
-              <div class="text-3xl font-bold text-slate-900 dark:text-white">{{ profile?.projectsCompleted || 5 }}+</div>
+              <div class="text-3xl font-bold text-slate-900 dark:text-white">{{ projects?.length || 0 }}</div>
               <div class="text-sm text-slate-500 dark:text-slate-400 mt-1">Proyectos</div>
             </div>
           </div>

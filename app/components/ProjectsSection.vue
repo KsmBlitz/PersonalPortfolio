@@ -13,6 +13,77 @@ defineProps<{
 
 const isVisible = ref(false)
 
+// Mapeo de tecnologías a sus URLs oficiales
+const techUrls: Record<string, string> = {
+  // Frontend
+  'React': 'https://react.dev',
+  'Vue': 'https://vuejs.org',
+  'Vue.js': 'https://vuejs.org',
+  'Nuxt': 'https://nuxt.com',
+  'Nuxt.js': 'https://nuxt.com',
+  'Next.js': 'https://nextjs.org',
+  'Angular': 'https://angular.io',
+  'Svelte': 'https://svelte.dev',
+  'Tailwind': 'https://tailwindcss.com',
+  'TailwindCSS': 'https://tailwindcss.com',
+  'Bootstrap': 'https://getbootstrap.com',
+  'Sass': 'https://sass-lang.com',
+  'TypeScript': 'https://www.typescriptlang.org',
+  'JavaScript': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+  
+  // Backend
+  'Node.js': 'https://nodejs.org',
+  'Node': 'https://nodejs.org',
+  'Express': 'https://expressjs.com',
+  'NestJS': 'https://nestjs.com',
+  'FastAPI': 'https://fastapi.tiangolo.com',
+  'Django': 'https://www.djangoproject.com',
+  'Flask': 'https://flask.palletsprojects.com',
+  'Laravel': 'https://laravel.com',
+  'Spring': 'https://spring.io',
+  
+  // Databases
+  'MongoDB': 'https://www.mongodb.com',
+  'PostgreSQL': 'https://www.postgresql.org',
+  'MySQL': 'https://www.mysql.com',
+  'Redis': 'https://redis.io',
+  'Firebase': 'https://firebase.google.com',
+  'Supabase': 'https://supabase.com',
+  
+  // Cloud & DevOps
+  'AWS': 'https://aws.amazon.com',
+  'Azure': 'https://azure.microsoft.com',
+  'GCP': 'https://cloud.google.com',
+  'Docker': 'https://www.docker.com',
+  'Kubernetes': 'https://kubernetes.io',
+  'Vercel': 'https://vercel.com',
+  'Netlify': 'https://www.netlify.com',
+  
+  // Tools
+  'Git': 'https://git-scm.com',
+  'GraphQL': 'https://graphql.org',
+  'REST': 'https://restfulapi.net',
+  'Prisma': 'https://www.prisma.io',
+  'Sanity': 'https://www.sanity.io',
+  'Strapi': 'https://strapi.io',
+  
+  // Mobile
+  'React Native': 'https://reactnative.dev',
+  'Flutter': 'https://flutter.dev',
+  
+  // Languages
+  'Python': 'https://www.python.org',
+  'Java': 'https://www.java.com',
+  'Go': 'https://go.dev',
+  'Rust': 'https://www.rust-lang.org',
+  'C#': 'https://docs.microsoft.com/en-us/dotnet/csharp',
+  'PHP': 'https://www.php.net'
+}
+
+const getTechUrl = (tech: string): string | undefined => {
+  return techUrls[tech] || techUrls[tech.toLowerCase()] || undefined
+}
+
 onMounted(() => {
   const observer = new IntersectionObserver(
     (entries) => {
@@ -54,7 +125,7 @@ onMounted(() => {
         <article 
           v-for="(project, index) in projects" 
           :key="project.title"
-          class="group bg-slate-50 dark:bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:shadow-xl transition-all duration-500"
+          class="project-card group bg-slate-50 dark:bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 transition-all duration-500"
           :class="isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
           :style="{ transitionDelay: `${150 + index * 100}ms` }"
         >
@@ -88,13 +159,17 @@ onMounted(() => {
 
             <!-- Technologies -->
             <div v-if="project.technologies && project.technologies.length > 0" class="flex flex-wrap gap-2 mb-5">
-              <span 
+              <a 
                 v-for="tech in project.technologies" 
                 :key="tech"
-                class="text-xs px-2.5 py-1 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full"
+                :href="getTechUrl(tech)"
+                :target="getTechUrl(tech) ? '_blank' : undefined"
+                :rel="getTechUrl(tech) ? 'noopener noreferrer' : undefined"
+                :class="getTechUrl(tech) ? 'hover:bg-slate-300 dark:hover:bg-slate-600 cursor-pointer' : 'cursor-default'"
+                class="text-xs px-2.5 py-1 bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-full transition-colors"
               >
                 {{ tech }}
-              </span>
+              </a>
             </div>
 
             <!-- Link -->
@@ -116,7 +191,13 @@ onMounted(() => {
 
       <!-- Loading State -->
       <div v-else-if="!projects" class="text-center py-20">
-        <p class="text-slate-500 dark:text-slate-400">Cargando proyectos...</p>
+        <div class="inline-flex flex-col items-center gap-4">
+          <div class="relative w-16 h-16">
+            <div class="absolute inset-0 border-4 border-slate-200 dark:border-slate-700 rounded-full"></div>
+            <div class="absolute inset-0 border-4 border-slate-600 dark:border-slate-400 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <p class="text-slate-500 dark:text-slate-400 font-medium">Cargando proyectos...</p>
+        </div>
       </div>
 
       <!-- Empty State -->
@@ -127,3 +208,48 @@ onMounted(() => {
     </div>
   </section>
 </template>
+<style scoped>
+/* 3D Hover Effect for Project Cards */
+.project-card {
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.project-card:hover {
+  transform: translateY(-8px) rotateX(2deg) rotateY(2deg);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.dark .project-card:hover {
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+/* Add subtle gradient overlay on hover */
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.project-card:hover::before {
+  opacity: 1;
+}
+
+.dark .project-card::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+}
+</style>

@@ -40,9 +40,9 @@ const socialLinks = computed(() => [
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid md:grid-cols-3 gap-8 items-center">
         <!-- Logo & tagline -->
-        <div class="text-center md:text-left">
-          <span class="text-xl font-bold text-slate-900 dark:text-white">VE</span>
-          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Construyendo el futuro digital</p>
+        <div class="text-center md:text-left flex flex-col items-center md:items-start">
+          <img src="/icon.png" alt="VE" class="h-12 w-12 mb-2" />
+          <p class="text-sm text-slate-500 dark:text-slate-400">Construyendo el futuro digital</p>
         </div>
 
         <!-- Social Links -->

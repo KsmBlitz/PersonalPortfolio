@@ -8,25 +8,42 @@ const toggleTheme = () => {
 
 const isScrolled = ref(false)
 const isMobileMenuOpen = ref(false)
+const activeSection = ref('hero')
 
 const navLinks = [
-  { name: 'Inicio', href: '#hero' },
-  { name: 'Sobre Mí', href: '#about' },
-  { name: 'Habilidades', href: '#skills' },
-  { name: 'Proyectos', href: '#projects' },
-  { name: 'Contacto', href: '#contact' }
+  { name: 'Inicio', href: '#hero', id: 'hero' },
+  { name: 'Sobre Mí', href: '#about', id: 'about' },
+  { name: 'Habilidades', href: '#skills', id: 'skills' },
+  { name: 'Proyectos', href: '#projects', id: 'projects' },
+  { name: 'Contacto', href: '#contact', id: 'contact' }
 ]
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll)
+  window.addEventListener('scroll', updateActiveSection)
+  updateActiveSection()
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  window.removeEventListener('scroll', updateActiveSection)
 })
 
 const handleScroll = () => {
   isScrolled.value = window.scrollY > 20
+}
+
+const updateActiveSection = () => {
+  const sections = navLinks.map(link => document.querySelector(link.href))
+  const scrollPosition = window.scrollY + 100
+
+  for (let i = sections.length - 1; i >= 0; i--) {
+    const section = sections[i]
+    if (section && section.offsetTop <= scrollPosition) {
+      activeSection.value = navLinks[i].id
+      break
+    }
+  }
 }
 
 const scrollTo = (href: string) => {
@@ -51,9 +68,9 @@ const scrollTo = (href: string) => {
         <a 
           href="#hero" 
           @click.prevent="scrollTo('#hero')"
-          class="text-lg font-semibold text-slate-900 dark:text-white tracking-tight hover:opacity-70 transition-opacity"
+          class="flex items-center hover:opacity-70 transition-opacity"
         >
-          VE
+          <img src="/icon.png" alt="VE" class="h-10 w-10" />
         </a>
 
         <!-- Desktop Navigation -->
@@ -63,9 +80,16 @@ const scrollTo = (href: string) => {
             :key="link.name"
             :href="link.href"
             @click.prevent="scrollTo(link.href)"
-            class="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+            class="relative text-sm transition-colors pb-1"
+            :class="activeSection === link.id 
+              ? 'text-slate-900 dark:text-white font-medium' 
+              : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'"
           >
             {{ link.name }}
+            <span 
+              class="absolute bottom-0 left-0 h-0.5 bg-slate-900 dark:bg-white transition-all duration-300"
+              :class="activeSection === link.id ? 'w-full' : 'w-0'"
+            ></span>
           </a>
           
           <!-- Theme Toggle - Sun/Moon Switch -->
