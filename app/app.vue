@@ -5,6 +5,7 @@ interface Project {
   description?: string;
   technologies?: string[];
   link?: string;
+  github?: string;
 }
 
 interface Profile {
@@ -28,7 +29,8 @@ const projectsQuery = `*[_type == "project"]{
   "imageUrl": image.asset->url,
   description,
   technologies,
-  link
+  link,
+  github
 }`
 
 // Query perfil

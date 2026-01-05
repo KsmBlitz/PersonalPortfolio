@@ -49,5 +49,10 @@ export const project = defineType({
       title: 'Enlace al Proyecto (URL)',
       type: 'url',
     }),
+    defineField({
+      name: 'github',
+      title: 'Enlace al Repositorio GitHub',
+      type: 'url',
+    }),
   ],
 })
